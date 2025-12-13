@@ -1,0 +1,44 @@
+✅ Step 1: Install Required Dependencies
+sudo apt update
+sudo apt install -y apt-transport-https ca-certificates curl gnupg lsb-release
+✅ Step 2: Install Docker (CE)
+# Add Docker’s official GPG key:
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+# Set up stable Docker repo:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] \
+  https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Install Docker Engine:
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+✅ Step 3: Give Docker Permissions to Your User
+sudo usermod -aG docker $USER
+
+✅ Step 4: Verify Docker Installation
+
+docker version
+docker run hello-world
+If you see a success message, Docker is working!
+
+✅ Step 5: Install kubectl
+sudo apt update
+sudo apt install -y apt-transport-https
+
+curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+kubectl version --client
+✅ Step 6: Install Minikube
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+minikube version
+✅ Step 7: Start Minikube with Docker Driver
+minikube start --driver=docker
+
+✅ Step 8: Test Kubernetes Cluster
+kubectl get nodes
+kubectl get pods -A
+You should see your cluster and control plane components.
